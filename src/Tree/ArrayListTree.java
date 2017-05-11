@@ -9,88 +9,165 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * An ArrayList Binary Tree
  * @author Daniel Jiménez Chísica
+ * @since 11 May 2017
  */
 public class ArrayListTree<T> {
-    
-    public static void main(String[] args) {
-        ArrayListTree tester=new ArrayListTree();
-        int obj=4;
-        tester.addLeftChild(obj, 4);
-        System.out.println("hola");
-    }
-    
-    
-    
-    
-    public ArrayList<T> getTree() {
-        return Tree;
-    }
 
-    public void setTree(ArrayList<T> Tree) {
-        this.Tree = Tree;
+    public ArrayList<T> Tree = new ArrayList<>();
+    public int size;
+
+    /**
+     * Initializes an ArrayList Binary Tree
+     * @param root The initial root
+     */
+    public ArrayListTree(T root) {
+        size = 0;
+        addRoot(root);
     }
     
-    private ArrayList<T> Tree=new ArrayList<>(10000);
-    
-    
-    public boolean isRoot(T element){
-       return element==Tree.get(0);
+    /**
+     * Wonders if a position is a root
+     * @param p The input position
+     * @return True is or false isn't
+     */
+    public boolean isRoot(T p) {
+        return Tree.indexOf(p) == 0;
     }
     
-    public void ensureMaxCapacity(ArrayList list, int cap){
-        if(list.size()<cap){
-            list.ensureCapacity(cap);
+    /**
+     * Obtains the root of the Tree
+     * @return The root
+     */
+    public T root() {
+        return Tree.get(0);
+    }
+    
+    /**
+     * Obtains the size of the Tree
+     * @return The size
+     */
+    public int size() {
+        return size;
+    }
+    
+    /**
+     * Obtains the parent of a specific position
+     * @param p The position
+     * @return Its parent
+     * @throws IllegalArgumentException If the parent is null
+     */
+    public T parent(T p) throws IllegalArgumentException {
+        T parent = null;
+        if (isRoot(p)) {
+            throw new IllegalArgumentException("The position is a root");
         }
+
+        if (Tree.indexOf(p) % 2 == 0) {
+            parent = Tree.get((Tree.indexOf(p) - 2) / 2);
+        } else {
+            parent = Tree.get((Tree.indexOf(p) - 1) / 2);
+        }
+        return parent;
     }
     
-     public void addLeftChild(T element, int position){
-        int positionLeftChild=(position*2)+1;
-        ArrayList<T> ActualTree=new ArrayList<>();
-        ActualTree=getTree();
-        ActualTree.set(positionLeftChild, element);
-        setTree(ActualTree);
-    }
-    
-    public void addRightChild(T element, int position){
-        int positionRightChild=(position*2)+2;
-        ArrayList<T> ActualTree=new ArrayList<>();
-        ActualTree=getTree();
-        ActualTree.set(positionRightChild, element);
-        setTree(ActualTree);
-    }
-    
-    public boolean isLeftChildren(T element){
-        int nextIndex=getTree().indexOf(element)+1;
-        return (getTree().indexOf(element))==(getTree().indexOf(getTree().get(nextIndex)))-1;
-    }
-    
-    public boolean isRightChildren(T element){
-        int previousIndex=getTree().indexOf(element)-1;
-        return (getTree().indexOf(element))==(getTree().indexOf(getTree().get(previousIndex)))+1;
-    }
-    
-    public T getParent(T element){
-        ArrayList<T> ActualTree=getTree();
-        return isLeftChildren(element)? 
-                ActualTree.get(((ActualTree.indexOf(element))-1)/2): 
-                ActualTree.get(((ActualTree.indexOf(element))-2)/2);
-    }
-    
-    public T getSibling(T element){
-        return isLeftChildren(element)?
-                getTree().get((getTree().indexOf(element))+1):
-                getTree().get((getTree().indexOf(element))-1);
-    }
-    
-    public ArrayList<T> getChildren(T element){
-        int positionLeftChild=((getTree().indexOf(element))*2)+1;
-        int positionRightChild=((getTree().indexOf(element))*2)+2;
-        ArrayList<T> children=new ArrayList<>();
-        children.add(getTree().get(positionLeftChild));
-        children.add(getTree().get(positionLeftChild));
+    /**
+     * Obtains the children of a position in an ArrayList
+     * @param p The position
+     * @return Its children
+     * @throws IllegalArgumentException 
+     */
+    public Iterable children(T p) throws IllegalArgumentException {
+        ArrayList<T> children = new ArrayList<>();
+
+        if (Tree.get((Tree.indexOf(p) * 2) + 1) != null) {
+            children.add(Tree.get((Tree.indexOf(p) * 2) + 1));
+        }
+
+        if (Tree.get((Tree.indexOf(p) * 2) + 2) != null) {
+            children.add(Tree.get((Tree.indexOf(p) * 2) + 2));
+        }
+
+        if (Tree.get((Tree.indexOf(p) * 2) + 1) == null && Tree.get((Tree.indexOf(p) * 2) + 2) == null) {
+            throw new IllegalArgumentException("The position hasn't children");
+        }
+
         return children;
     }
     
+    /**
+     * Returns the number of the children in a position
+     * @param p The position
+     * @return The number of its children
+     */
+    public int numChildren(T p) {
+        int counter = 0;
+        if (Tree.get((Tree.indexOf(p) * 2) + 1) != null) {
+            counter++;
+        }
+
+        if (Tree.get((Tree.indexOf(p) * 2) + 2) != null) {
+            counter++;
+        }
+
+        return counter;
+    }
+    
+    /**
+     * Assigns the left child of an element
+     * @param element The element to be the left child
+     * @param p The chosen element
+     * @throws IllegalArgumentException The position has already a left element
+     */
+    public void addLeftChild(T element, T p) throws IllegalArgumentException {
+        int index = (Tree.indexOf(p) * 2) + 1;
+
+        if (Tree.get(index) != null) {
+            throw new IllegalArgumentException("The position has already a left child");
+        } else {
+            Tree.set(index, element);
+            size++;
+        }
+    }
+    
+    /**
+     * Assigns the right child of an element
+     * @param element The element to be the left child
+     * @param p The chosen element
+     * @throws IllegalArgumentException The position has already a right child
+     */
+    public void addRightChild(T element, T p) throws IllegalArgumentException {
+        int index = (Tree.indexOf(p) * 2) + 2;
+
+        if (Tree.get(index) != null) {
+            throw new IllegalArgumentException("The position has already a Right Child");
+        } else {
+            Tree.set(index, element);
+            size++;
+        }
+    }
+    
+    /**
+     * Assigns the root
+     * @param element The root
+     */
+    public void addRoot(T element) {
+        Tree.set(0, element);
+        Tree.set(1, null);
+        Tree.set(2, null);
+    }
+    
+    /**
+     * Increase the size of the ArrayList Binary Tree
+     * @param addSize The added spaces
+     */
+    public void increaseSize(int addSize) {
+        for (int i = size; i < size + addSize; i++) {
+            Tree.add(i, null);
+        }
+
+        size = size + addSize;
+    }
+
 }
