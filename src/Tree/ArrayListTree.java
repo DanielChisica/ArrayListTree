@@ -10,6 +10,7 @@ import java.util.List;
 
 /**
  * An ArrayList Binary Tree
+ *
  * @author Daniel Jiménez Chísica
  * @since 11 May 2017
  */
@@ -17,43 +18,50 @@ public class ArrayListTree<T> {
 
     public ArrayList<T> Tree = new ArrayList<>();
     public int size;
+    public T first;
 
     /**
      * Initializes an ArrayList Binary Tree
+     *
      * @param root The initial root
      */
-    public ArrayListTree(T root) {
+    public ArrayListTree() {
         size = 0;
-        addRoot(root);
+        first=null;
+        Tree.add(first);
     }
-    
+
     /**
      * Wonders if a position is a root
+     *
      * @param p The input position
      * @return True is or false isn't
      */
     public boolean isRoot(T p) {
         return Tree.indexOf(p) == 0;
     }
-    
+
     /**
      * Obtains the root of the Tree
+     *
      * @return The root
      */
     public T root() {
         return Tree.get(0);
     }
-    
+
     /**
      * Obtains the size of the Tree
+     *
      * @return The size
      */
     public int size() {
         return size;
     }
-    
+
     /**
      * Obtains the parent of a specific position
+     *
      * @param p The position
      * @return Its parent
      * @throws IllegalArgumentException If the parent is null
@@ -71,12 +79,13 @@ public class ArrayListTree<T> {
         }
         return parent;
     }
-    
+
     /**
      * Obtains the children of a position in an ArrayList
+     *
      * @param p The position
      * @return Its children
-     * @throws IllegalArgumentException 
+     * @throws IllegalArgumentException
      */
     public Iterable children(T p) throws IllegalArgumentException {
         ArrayList<T> children = new ArrayList<>();
@@ -95,9 +104,10 @@ public class ArrayListTree<T> {
 
         return children;
     }
-    
+
     /**
      * Returns the number of the children in a position
+     *
      * @param p The position
      * @return The number of its children
      */
@@ -113,9 +123,10 @@ public class ArrayListTree<T> {
 
         return counter;
     }
-    
+
     /**
      * Assigns the left child of an element
+     *
      * @param element The element to be the left child
      * @param p The chosen element
      * @throws IllegalArgumentException The position has already a left element
@@ -130,9 +141,10 @@ public class ArrayListTree<T> {
             size++;
         }
     }
-    
+
     /**
      * Assigns the right child of an element
+     *
      * @param element The element to be the left child
      * @param p The chosen element
      * @throws IllegalArgumentException The position has already a right child
@@ -147,19 +159,26 @@ public class ArrayListTree<T> {
             size++;
         }
     }
-    
+
     /**
      * Assigns the root
+     *
      * @param element The root
      */
     public void addRoot(T element) {
+        if (first!=null) {
+            throw new IllegalArgumentException("A root already exists");
+        } else {
         Tree.set(0, element);
-        Tree.set(1, null);
-        Tree.set(2, null);
+        Tree.add(1, null);
+        Tree.add(2, null);
+        size=1;
+        }
     }
-    
+
     /**
      * Increase the size of the ArrayList Binary Tree
+     *
      * @param addSize The added spaces
      */
     public void increaseSize(int addSize) {
