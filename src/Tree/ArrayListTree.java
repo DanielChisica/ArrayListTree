@@ -22,8 +22,6 @@ public class ArrayListTree<T> {
 
     /**
      * Initializes an ArrayList Binary Tree
-     *
-     * @param root The initial root
      */
     public ArrayListTree() {
         size = 0;
@@ -85,7 +83,7 @@ public class ArrayListTree<T> {
      *
      * @param p The position
      * @return Its children
-     * @throws IllegalArgumentException
+     * @throws IllegalArgumentException Hasn't children
      */
     public Iterable children(T p) throws IllegalArgumentException {
         ArrayList<T> children = new ArrayList<>();
